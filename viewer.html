@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3D Model Viewer - PawsVdeX</title>
+    
+    <!-- This is the core <model-viewer> library from Google -->
+    <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.5.0/model-viewer.min.js"></script>
+
+    <style>
+        /* Basic styling to make the viewer fill the page */
+        html, body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden; /* Prevents scrollbars */
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+        }
+
+        model-viewer {
+            width: 100%;
+            height: 100%;
+            background-color: #f0f0f0; /* A light grey background */
+        }
+        
+        /* Container for the buttons */
+        .button-container {
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 10px;
+            background-color: rgba(255, 255, 255, 0.8);
+            padding: 10px;
+            border-radius: 12px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
+        /* Styling for the buttons */
+        .variant-button {
+            padding: 10px 20px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            background-color: #fff;
+            color: #333;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .variant-button:hover {
+            background-color: #e9e9e9;
+        }
+        
+        /* Style for the active/selected button */
+        .variant-button.active {
+            background-color: #007bff;
+            color: #fff;
+            border-color: #007bff;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 
+      This is the 3D viewer component.
+      The 'src' is set to the first model by default.
+    -->
+    <model-viewer 
+        id="viewer"
+        src="https://raw.githubusercontent.com/richiewg3/3DPawsVdeX_Modelz/main/bubusaur.glb"
+        alt="A 3D model of Bubusaur - Juvenile"
+        ar
+        camera-controls
+        auto-rotate
+        shadow-intensity="1"
+        environment-image="neutral">
+    </model-viewer>
+
+    <!-- Buttons to switch between the models -->
+    <div class="button-container">
+        <button class="variant-button active" data-model="juvenile">Juvenile</button>
+        <button class="variant-button" data-model="mature">Mature</button>
+        <button class="variant-button" data-model="mythical">Mythical</button>
+    </div>
+
+    <script>
+        // Get references to the HTML elements we need to work with
+        const modelViewer = document.querySelector('#viewer');
+        const buttons = document.querySelectorAll('.variant-button');
+
+        // Store the URLs and descriptions for each model in an object
+        const models = {
+            juvenile: {
+                url: 'https://raw.githubusercontent.com/richiewg3/3DPawsVdeX_Modelz/main/bubusaur.glb',
+                alt: 'A 3D model of Bubusaur - Juvenile'
+            },
+            mature: {
+                url: 'https://raw.githubusercontent.com/richiewg3/3DPawsVdeX_Modelz/main/bubsaur2.glb',
+                alt: 'A 3D model of Bubusaur - Mature'
+            },
+            mythical: {
+                url: 'https://raw.githubusercontent.com/richiewg3/3DPawsVdeX_Modelz/main/bubbaaur3.glb',
+                alt: 'A 3D model of Bubusaur - Mythical'
+            }
+        };
+
+        // Add a click event listener to each button
+        buttons.forEach(button => {
+            button.addEventListener('click', () => {
+                // Get the key for the selected model from the button's 'data-model' attribute
+                const modelKey = button.dataset.model;
+
+                // Update the model-viewer's src and alt attributes
+                modelViewer.src = models[modelKey].url;
+                modelViewer.alt = models[modelKey].alt;
+
+                // Update the active state of the buttons
+                buttons.forEach(btn => btn.classList.remove('active'));
+                button.classList.add('active');
+            });
+        });
+    </script>
+
+</body>
+</html>
